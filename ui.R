@@ -1,17 +1,21 @@
 shinyUI(
   pageWithSidebar(
     # Application title
-    headerPanel("Diabetes prediction"),
+    headerPanel("Pythagorean Win calculator"),
     sidebarPanel(
-      numericInput('glucose', 'Glucose mg/dl', 90, min = 50, max = 200, step = 5),
-      submitButton('Submit')
-    ),
+      selectInput('team', 'Select a team',
+                  choices = unique(Teams$name[order(Teams$name)]),
+                  selected = 'Detroit Tigers'),
+      numericInput('year', 'Select a year',
+                   value = 1984, min = 1901, max = 2013, step = 1),
+      actionButton('yrAction', 'Calculate!')
+      ),
     mainPanel(
-      h3('Results of prediction'),
-      h4('You entered'),
-      verbatimTextOutput("inputValue"),
-      h4('Which resulted in a prediction of '),
-      verbatimTextOutput("prediction")
+       h3('Results'),
+#       h4('You entered'),
+#       verbatimTextOutput("team"),
+#       h4('Which resulted in a prediction of '),
+       uiOutput("result")
     )
   )
 )
