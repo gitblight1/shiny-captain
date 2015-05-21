@@ -13,12 +13,13 @@ shinyUI(
       actionButton('yrAction', 'Calculate!'),
       withMathJax(
         helpText(HTML("Calculates <a href=\"https://en.wikipedia.org/wiki/Pythagorean_expectation\">pythagorean (expected) wins</a>"),
-                 "for the selected baseball team and season. This is calculated using the formula",
+                 "for the selected baseball team and season (data exists through the 2013 season).",
+                 "This is calculated using the formula",
                  "$$\\frac{(Runs)^a}{(Runs)^a + (Runs Allowed)^a}$$",
                  "where the exponent \\(a\\) is calculated using the",
                  HTML("'<a href=\"https://en.wikipedia.org/wiki/Pythagenpat\">Pythagenpat</a>' method."),
                "If you select a season where the selected team did not play, the",
-               "selection box will be reset to the nearest season they did play."))
+               "selection box will be reset (in most cases) to the nearest season they did play."))
       ),
     mainPanel(
        h3('Results'),
