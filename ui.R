@@ -1,3 +1,5 @@
+library(Lahman)
+
 shinyUI(
   pageWithSidebar(
     # Application title

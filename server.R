@@ -1,5 +1,4 @@
 library(Lahman)
-data(Teams)
 
 pythagWpct <- function(rScored, rAllowed, games) {
   exponent = ((rScored + rAllowed)/games)^0.287
