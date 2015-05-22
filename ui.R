@@ -1,9 +1,10 @@
-library(Lahman)
+library(Lahman) # gotta include this here and in server.R
 
 shinyUI(
   pageWithSidebar(
     # Application title
     headerPanel("Pythagorean Win Calculator"),
+    # Input section
     sidebarPanel(
       selectInput('team', 'Select a team',
                   choices = unique(Teams$name[order(Teams$name)]),
@@ -11,6 +12,7 @@ shinyUI(
       numericInput('year', 'Select a season',
                    value = 1984, min = 1901, max = 2013, step = 1),
       actionButton('yrAction', 'Calculate!'),
+      
       withMathJax(
         helpText(HTML("Calculates <a href=\"https://en.wikipedia.org/wiki/Pythagorean_expectation\">pythagorean (expected) wins</a>"),
                  "for the selected baseball team and season (data exists through the 2013 season).",
@@ -21,9 +23,10 @@ shinyUI(
                "If you select a season where the selected team did not play, the",
                "selection box will be reset (in most cases) to the nearest season they did play."))
       ),
+    # Output section
     mainPanel(
        h3('Results'),
-       uiOutput("result")
+       uiOutput("result") # output is dynamically rendered in server.R
     )
   )
 )
