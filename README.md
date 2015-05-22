@@ -8,9 +8,10 @@ The app is hosted at https://capn-tightpants.shinyapps.io/pythagorean-wins/
 2. Select a season, either using the arrows or by typing a year directly in the box.
 3. Click the 'Calculate!' button. The results will appear on the right side of the screen.
 
-## If the results didn't appear.
+## If the results didn't appear
 If you select a season where your team didn't play, the result set will be blank.
 If the season is outside the range of years where the team played, the season will be reset to the nearest year in that range.
 Select a season where the team did play, and click the button again.
+
 In a few cases, years inside the range will not produce a result,
-in the case of teams which fold and are re-started several years later (for example, the Washington Senators have no 1900 results).
+in the case of teams which fold or move and are re-started several years later (for example, the Washington Senators have no 1900 results).
