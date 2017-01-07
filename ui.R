@@ -12,6 +12,12 @@ shinyUI(
       selectInput('year', 'Select a season',
                    selected = 1984, choices = seq(1901,2015)),
       #TODO add checkboxes for exponents here
+      checkboxGroupInput('exponent', 'Select calculation methods:',
+                         c("Original",
+                           "Baseball Reference",
+                           "Pythagenport",
+                           "Pythagenpat")
+                        ),
       actionButton('yrAction', 'Calculate!'),
       
       withMathJax(
@@ -19,15 +25,17 @@ shinyUI(
                  "for the selected baseball team and season (data exists through the 2013 season).",
                  "This is calculated using the formula",
                  "$$\\frac{(Runs)^a}{(Runs)^a + (Runs Allowed)^a}$$",
-                 "where the exponent \\(a\\) is calculated using the",
-                 HTML("'<a href=\"https://en.wikipedia.org/wiki/Pythagenpat\">Pythagenpat</a>' method."),
+                 "where the exponent \\(a\\) is calculated up to four different ways.",
+                 "Use the checkboxes to select the method(s) to calculate the exponent;",
+                 "each method is explained in the link above.",
                "If you select a season where the selected team did not play, the",
                "selection box will be reset to the nearest season they did play."))
       ),
     # Output section
     mainPanel(
        h3('Results'),
-       uiOutput("result") # output is dynamically rendered in server.R
+       uiOutput("result"), # output is dynamically rendered in server.R
+       tableOutput("data")
     )
   )
 )

@@ -1,22 +1,50 @@
 library(Lahman) # gotta load this here and in ui.R
 
 # Calculate expected win percentage
-pythagWpct <- function(rScored, rAllowed, games) {
-  # Calculate the exponent using the 'Pythagenpat' method
-  exponent = ((rScored + rAllowed)/games)^0.287
+pythagWpct <- function(rScored, rAllowed, exponent) {
   
   rScored^exponent / (rScored^exponent + rAllowed^exponent)
 }
 
+origExp <- 2
+
+brExp <- 1.83
+
+portExp <- function(rScored, rAllowed, games) {
+    # Calculate the exponent using the 'Pythagenport' method
+    exponent = 1.5 + log((rScored + rAllowed)/games) + 0.45
+}
+
+patExp <- function(rScored, rAllowed, games) {
+    # Calculate the exponent using the 'Pythagenpat' method
+    exponent = ((rScored + rAllowed)/games)^0.287
+}
+
+makeTable <- function(season) {
+    rows = c('Original', 'Baseball Reference', 'Pythagenport', 'Pythagenpat')
+    expList = c(origExp, brExp, with(season, portExp(R, RA, G)), with(season, patExp(R, RA, G)))
+    pWpct = with(season, pythagWpct(R, RA, expList))
+    pythagRecord <- data.frame('pct.' = round(pWpct,4), 'Wins' = with(season, as.integer(round(G*pWpct, 0))), 'Losses' = with(season, G - as.integer(round(G*pWpct, 0))), row.names = rows)
+}
+
 # Format the output string and return it as an HTML element.
 formatResult <- function(season) {
-  pWpct = with(season, pythagWpct(R, RA, G))
-  result = with(season, sprintf("In %d, the %s scored %d runs and allowed %d,
-                   giving them an expected win percentage of %.3f
-                   (expected record %d-%d).<br/>
-                   Their actual record was %d-%d.",
-                   yearID, name, R, RA, pWpct, round(G*pWpct,0),
-                   G-round(G*pWpct,0), W, L))
+
+  result = with(
+      season,
+      sprintf(
+          "In %d, the %s scored %d runs and allowed %d in %d games.<br/>
+          Their actual record was %d-%d.<br/>
+          Expected win percentage(s) and record(s):",
+          yearID,
+          name,
+          R,
+          RA,
+          G,
+          W,
+          L
+      )
+  )
   HTML(result)
 }
 
@@ -29,10 +57,8 @@ shinyServer(
     )
     observe({
       # Update the valid year inputs based on yrRange. This only updates when
-      # the Calculate button is pressed, and doesn't disallow years between two
-      # different franchises with the same team name (e.g., the 1901 and
-      # 1970-2013 versions of the Milwaukee Brewers). Perhaps a select box would
-      # have been a better idea?
+      # the Calculate button is pressed, and should disallow years when the selected
+      # franchise did not play.
       input$yrAction
       isolate({
       yrs = yrRng()
@@ -53,5 +79,9 @@ shinyServer(
       input$yrAction
       isolate(formatResult(season()))
     })
+    output$data <- renderTable({
+        input$exponent
+        isolate(makeTable(season())[input$exponent,,drop=FALSE])
+    }, rownames = TRUE)
   }
 )
