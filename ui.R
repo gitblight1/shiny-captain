@@ -9,8 +9,9 @@ shinyUI(
       selectInput('team', 'Select a team',
                   choices = unique(Teams$name[order(Teams$name)]),
                   selected = 'Detroit Tigers'),
-      numericInput('year', 'Select a season',
-                   value = 1984, min = 1901, max = 2013, step = 1),
+      selectInput('year', 'Select a season',
+                   selected = 1984, choices = seq(1901,2015)),
+      #TODO add checkboxes for exponents here
       actionButton('yrAction', 'Calculate!'),
       
       withMathJax(
@@ -21,7 +22,7 @@ shinyUI(
                  "where the exponent \\(a\\) is calculated using the",
                  HTML("'<a href=\"https://en.wikipedia.org/wiki/Pythagenpat\">Pythagenpat</a>' method."),
                "If you select a season where the selected team did not play, the",
-               "selection box will be reset (in most cases) to the nearest season they did play."))
+               "selection box will be reset to the nearest season they did play."))
       ),
     # Output section
     mainPanel(

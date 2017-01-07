@@ -24,8 +24,8 @@ shinyServer(
   function(input, output, session) {
 
     yrRng = reactive(
-      # When a team is selected, get the first and last year they played
-      range(Teams$yearID[Teams$name == input$team])
+      # When a team is selected, get the years they played
+      sort(Teams$yearID[Teams$name == input$team])
     )
     observe({
       # Update the valid year inputs based on yrRange. This only updates when
@@ -35,14 +35,12 @@ shinyServer(
       # have been a better idea?
       input$yrAction
       isolate({
-      minYr = yrRng()[1]
-      maxYr = yrRng()[2]
-      # if the current year is outside the range, reset it to the nearest end.
-      curYr = min(maxYr, max(minYr, input$year))
-      updateNumericInput(session, 'year',
-                         value = curYr,
-                         min = minYr,
-                         max = maxYr)
+      yrs = yrRng()
+      # if the current year is outside the range, reset it to the nearest year in the range.
+      curYr = yrs[which.min(abs(yrs-as.numeric(input$year)))]
+      updateSelectInput(session, 'year',
+                         choices = yrs,
+                         selected = curYr)
       })
     })
     season <- reactive(
