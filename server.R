@@ -31,7 +31,7 @@ makeTable <- function(season) {
     pWpct = with(season, pythagWpct(R, RA, expList))
     pythagRecord <-
         data.frame(
-            'pct.' = round(pWpct, 3),
+            'pct.' = pWpct,
             'Wins' = with(season, as.integer(round(G * pWpct, 0))),
             'Losses' = with(season, G - as.integer(round(G * pWpct, 0))),
             row.names = rows
@@ -44,7 +44,7 @@ formatResult <- function(season) {
         season,
         sprintf(
             "In %d, the %s scored %d runs and allowed %d in %d games.<br/>
-            Their actual record was %d-%d.<br/>
+            Their actual record was %d-%d, a win percentage of %.3f.<br/>
             Expected win percentage(s) and record(s):",
             yearID,
             name,
@@ -52,7 +52,8 @@ formatResult <- function(season) {
             RA,
             G,
             W,
-            L
+            L,
+            W/(W+L)
         )
     )
     HTML(result)
@@ -82,10 +83,12 @@ shinyServer(function(input, output, session) {
     
     resultText <- eventReactive(input$yrAction, formatResult(season()))
     resultData <- eventReactive(input$yrAction, makeTable(season()))
+#    resultCaveat <- eventReactive(input$yrAction, makeCaveat(season()))
     # create the main result when the calculate button is clicked.
     output$result <- renderUI(resultText())
     output$data <-renderTable(
         resultData()[input$exponent, , drop = FALSE], 
-        rownames = TRUE
+        rownames = TRUE,
+        digits = 3
         )
 })
