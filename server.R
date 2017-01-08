@@ -59,6 +59,12 @@ formatResult <- function(season) {
     HTML(result)
 }
 
+makeCaveat <- function(season) {
+    caveat <- "Wondering why W + L does not equal the number of games played?<br/>
+    Ties and suspended games that are not finished do not count towards a team's record.<br/>
+    This was common prior to the advent of stadium lights and air travel, but is rare today."
+    HTML(if(with(season, G > (W + L))) caveat else NULL)
+}
 shinyServer(function(input, output, session) {
     yrRng = reactive(# When a team is selected, get the years they played
         sort(Teams$yearID[Teams$name == input$team]))
@@ -83,7 +89,7 @@ shinyServer(function(input, output, session) {
     
     resultText <- eventReactive(input$yrAction, formatResult(season()))
     resultData <- eventReactive(input$yrAction, makeTable(season()))
-#    resultCaveat <- eventReactive(input$yrAction, makeCaveat(season()))
+    resultCaveat <- eventReactive(input$yrAction, makeCaveat(season()))
     # create the main result when the calculate button is clicked.
     output$result <- renderUI(resultText())
     output$data <-renderTable(
@@ -91,4 +97,5 @@ shinyServer(function(input, output, session) {
         rownames = TRUE,
         digits = 3
         )
+    output$caveat <- renderUI(resultCaveat())
 })

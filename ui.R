@@ -48,5 +48,6 @@ shinyUI(pageWithSidebar(
     # Output section
     mainPanel(h3('Results'),
               uiOutput("result"), # output is dynamically rendered in server.R
-              tableOutput("data"))
+              tableOutput("data"),
+              uiOutput("caveat"))
 ))
