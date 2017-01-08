@@ -1,4 +1,8 @@
 library(Lahman) # gotta include this here and in server.R
+rows <- c("Original",
+          "Baseball Reference",
+          "Pythagenport",
+          "Pythagenpat")
 
 shinyUI(pageWithSidebar(
     # Application title
@@ -17,16 +21,11 @@ shinyUI(pageWithSidebar(
             selected = 1984,
             choices = seq(1901, 2015)
         ),
-        #TODO add checkboxes for exponents here
         checkboxGroupInput(
             'exponent',
             'Select calculation methods:',
-            c(
-                "Original",
-                "Baseball Reference",
-                "Pythagenport",
-                "Pythagenpat"
-            )
+            choices = rows,
+            selected = rows
         ),
         actionButton('yrAction', 'Calculate!'),
         
