@@ -69,10 +69,9 @@ shinyServer(function(input, output, session) {
     yrRng = reactive(# When a team is selected, get the years they played
         sort(Teams$yearID[Teams$name == input$team]))
     observe({
-        # Update the valid year inputs based on yrRange. This only updates when
-        # the Calculate button is pressed, and should disallow years when the selected
-        # franchise did not play.
-        input$yrAction
+        # Update the valid year inputs based on yrRange. This should update whenever
+        # the selected team changes.
+        input$team
         isolate({
             yrs = yrRng()
             # if the current year is outside the range, reset it to the nearest year in the range.
