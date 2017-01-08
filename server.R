@@ -11,7 +11,7 @@ brExp <- 1.83
 
 portExp <- function(rScored, rAllowed, games) {
     # Calculate the exponent using the 'Pythagenport' method
-    exponent = 1.5 + log((rScored + rAllowed) / games) + 0.45
+    exponent = 1.5 * log((rScored + rAllowed) / games, 10) + 0.45
 }
 
 patExp <- function(rScored, rAllowed, games) {
@@ -31,7 +31,7 @@ makeTable <- function(season) {
     pWpct = with(season, pythagWpct(R, RA, expList))
     pythagRecord <-
         data.frame(
-            'pct.' = round(pWpct, 4),
+            'pct.' = round(pWpct, 3),
             'Wins' = with(season, as.integer(round(G * pWpct, 0))),
             'Losses' = with(season, G - as.integer(round(G * pWpct, 0))),
             row.names = rows
