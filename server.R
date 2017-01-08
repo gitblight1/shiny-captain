@@ -76,16 +76,16 @@ shinyServer(function(input, output, session) {
                               selected = curYr)
         })
     })
-    season <- reactive(# grab info about the season when a team and year are selected.
-        Teams[Teams$name == input$team & Teams$yearID == input$year, ])
+    season <-
+        reactive(# grab info about the season when a team and year are selected.
+            Teams[Teams$name == input$team & Teams$yearID == input$year,])
     
+    resultText <- eventReactive(input$yrAction, formatResult(season()))
+    resultData <- eventReactive(input$yrAction, makeTable(season()))
     # create the main result when the calculate button is clicked.
-    output$result <- renderUI({
-        input$yrAction
-        isolate(formatResult(season()))
-    })
-    output$data <- renderTable({
-        input$exponent
-        isolate(makeTable(season())[input$exponent, , drop = FALSE])
-    }, rownames = TRUE)
+    output$result <- renderUI(resultText())
+    output$data <-renderTable(
+        resultData()[input$exponent, , drop = FALSE], 
+        rownames = TRUE
+        )
 })
